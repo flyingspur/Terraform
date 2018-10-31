@@ -1,3 +1,10 @@
+# Chose AWS provider
+provider "aws" {
+	region = "${var.AWS_REGION}"
+  access_key = "${var.AWS_ACCESS_KEY_ID}"
+  secret_key = "${var.AWS_SECRET_ACCESS_KEY}"
+	}
+
 # Create a VPC
 resource "aws_vpc" "cloudapp" {
     cidr_block = "10.0.0.0/26"
@@ -105,38 +112,38 @@ resource "aws_elb" "cloudappelb" {
 
 # Pointer to the userdata script
 data "template_file" "user_data" {
-template = "${file("userdata.sh")}"
+	template = "${file("userdata.sh")}"
 }
 
 # Create a launch template
 resource "aws_launch_template" "cloudapp" {
-    name_prefix = "cloudapp"
-    image_id = "${lookup(var.AMI, var.AWS_REGION)}"
-    instance_type = "t2.micro"
-    key_name = "${var.AWS_KEY_PAIR}"
-    vpc_security_group_ids = ["${aws_security_group.cloudapp.id}"]
-    user_data = "${base64encode(data.template_file.user_data.template)}"
-    tags {
-        Name = "cloudapp"
-    }
+	name_prefix = "cloudapp"
+	image_id = "${lookup(var.AMI, var.AWS_REGION)}"
+	instance_type = "t2.micro"
+	key_name = "${var.AWS_KEY_PAIR}"
+	vpc_security_group_ids = ["${aws_security_group.cloudapp.id}"]
+	user_data = "${base64encode(data.template_file.user_data.template)}"
+	tags {
+			Name = "cloudapp"
+	}
 }
 
 # Create an Autoscaling group
 resource "aws_autoscaling_group" "cloudapp" {
-    vpc_zone_identifier = ["${aws_subnet.cloudapp.id}"]
-    desired_capacity = 2
-    max_size = 2
-    min_size = 2
-    load_balancers = ["${aws_elb.cloudappelb.name}"]
-    launch_template = {
-        id = "${aws_launch_template.cloudapp.id}"
-        version = "$$Latest"
-    }
-    tags = [
-        {
-        key                 = "Name"
-        value               = "cloudapp"
-        propagate_at_launch = true
-        }
-    ]
+  vpc_zone_identifier = ["${aws_subnet.cloudapp.id}"]
+  desired_capacity = 2
+  max_size = 2
+  min_size = 2
+  load_balancers = ["${aws_elb.cloudappelb.name}"]
+  launch_template = {
+      id = "${aws_launch_template.cloudapp.id}"
+      version = "$$Latest"
+  }
+  tags = [
+      {
+      key                 = "Name"
+      value               = "cloudapp"
+      propagate_at_launch = true
+      }
+  ]
 }
