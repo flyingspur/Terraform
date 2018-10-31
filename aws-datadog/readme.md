@@ -1,12 +1,6 @@
-<<<<<<< HEAD
  A simple web application using Terraform provisioner and providers - AWS and Datadog.
   The provisioning is seggregated in to two modules:
   * Infrastructure
-=======
- Using Terraform provisioner and providers - AWS and Datadog.
-  The provisioning is seggreated in to two modules:
-  * Infrastruture
->>>>>>> 10d565c68ddf5054569300822e6d431c5f22d1a9
   * Monitoring
 
   ##### Infrastructure
