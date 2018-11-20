@@ -43,7 +43,7 @@
   For reasons unbeknownst to me, there seems to be a one-time (as long as the integration is not uninstalled) need to manually click the "Update Configuration" button in the configuration tab of https://app.datadoghq.com/account/settings#integrations/amazon_web_services after the above provisioning steps complete, in the AWS-Integration dialog box in the Datadog Integration screen. Post which metrics should flow in to Datadog in few minutes.
 
   ##### Destroy
-  A destroy deletes the AWS-Datadog account from the integration and not the integration itself.
+  A destroy deletes the AWS-Datadog account from the integration and not the integration itself, in addition to all AWS resources.
   ```sh
   $ terraform destroy
   ```
